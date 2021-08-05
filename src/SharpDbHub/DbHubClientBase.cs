@@ -51,36 +51,28 @@ namespace SharpDbHub
 #pragma warning restore CA1816 // Dispose methods should call SuppressFinalize
         #endregion
 
-        #region Send Request Methods
-        protected virtual HttpResponseMessage SendRequest<T>(string endpoint, T? request, CancellationToken cancellationToken = default)
-            where T : AuthRequestBase
+        protected FormUrlEncodedContent CreateContent<T>(T? request) where T : AuthRequestBase
         {
-            request = request == null ? null : request with { ApiKey = string.IsNullOrWhiteSpace(request.ApiKey) ? Options.ApiKey : request.ApiKey };
-            IEnumerable<KeyValuePair<string, string?>>? keyValuePairs = null;
+            request = TrySetApiFallback(request);
+            IEnumerable<KeyValuePair<string, string>>? keyValuePairs = null;
             if (request is not null)
             {
                 var json = JsonSerializer.Serialize(request, options: _jsonSerializerOptions);
                 using var jDoc = JsonDocument.Parse(json);
-                var enumerable = jDoc.RootElement.EnumerateObject();
+                var enumerable = jDoc.RootElement.EnumerateObject().ToArray();
                 keyValuePairs = enumerable.Select(CreateKeyValuePair()).ToArray();
             }
             keyValuePairs ??= new[] { KeyValuePair.Create("apikey", Options.ApiKey) }!;
+            keyValuePairs = keyValuePairs.Where(x => !string.IsNullOrWhiteSpace(x.Value));
             var content = new FormUrlEncodedContent(keyValuePairs!);
-
-            var syncHttpRequestMessage = new HttpRequestMessage(new("POST"), endpoint)
-            {
-                Content = content
-            };
-            var response = _httpClient.Send(syncHttpRequestMessage, cancellationToken);
-            response.EnsureSuccessStatusCode();
-            return response;
+            return content;
         }
 
-        protected virtual async ValueTask<HttpResponseMessage> SendRequestAsync<T>(string endpoint, T? request, CancellationToken cancellationToken = default)
+        protected async Task<FormUrlEncodedContent> CreateContentAsync<T>(T? request, CancellationToken cancellationToken)
             where T : AuthRequestBase
         {
-            request = request == null ? null : request with { ApiKey = string.IsNullOrWhiteSpace(request.ApiKey) ? Options.ApiKey : request.ApiKey };
-            IEnumerable<KeyValuePair<string, string?>>? keyValuePairs = null;
+            request = TrySetApiFallback(request);
+            IEnumerable<KeyValuePair<string, string>>? keyValuePairs = null;
             if (request is not null)
             {
                 using var ms = new MemoryStream();
@@ -92,15 +84,49 @@ namespace SharpDbHub
                 keyValuePairs = enumerable.Select(CreateKeyValuePair()).ToArray();
             }
             keyValuePairs ??= new[] { KeyValuePair.Create("apikey", Options.ApiKey) }!;
+            keyValuePairs = keyValuePairs.Where(x => !string.IsNullOrWhiteSpace(x.Value));
             var content = new FormUrlEncodedContent(keyValuePairs!);
+            return content;
+        }
+
+        private static Func<JsonProperty, KeyValuePair<string, string>> CreateKeyValuePair() => jp => KeyValuePair.Create(jp.Name, jp.Value.ToString());
+
+        protected T? TrySetApiFallback<T>(T? request)
+            where T : AuthRequestBase => request != null
+            ? request with
+            {
+                ApiKey = !string.IsNullOrWhiteSpace(request.ApiKey)
+                    ? request.ApiKey
+                    : Options.ApiKey
+            }
+            : null;
+
+        #region Send Request Methods
+        protected virtual HttpResponseMessage SendRequest<T>(string endpoint, T? request, CancellationToken cancellationToken = default)
+            where T : AuthRequestBase
+        {
+            request = TrySetApiFallback(request);
+            FormUrlEncodedContent content = CreateContent(request);
+
+            var syncHttpRequestMessage = new HttpRequestMessage(HttpMethod.Post, endpoint)
+            {
+                Content = content
+            };
+            var response = _httpClient.Send(syncHttpRequestMessage, cancellationToken);
+            response.EnsureSuccessStatusCode();
+            return response;
+        }
+
+        protected virtual async ValueTask<HttpResponseMessage> SendRequestAsync<T>(string endpoint, T? request, CancellationToken cancellationToken = default)
+            where T : AuthRequestBase
+        {
+            request = TrySetApiFallback(request);
+            FormUrlEncodedContent content = await CreateContentAsync(request, cancellationToken);
 
             var response = await _httpClient.PostAsync(endpoint, content, cancellationToken);
             response.EnsureSuccessStatusCode();
             return response;
-
         }
-
-        private static Func<JsonProperty, KeyValuePair<string, string?>> CreateKeyValuePair() => jp => KeyValuePair.Create(jp.Name, jp.Value.GetString());
         #endregion
 
         #region Read Content As Methods
@@ -108,11 +134,11 @@ namespace SharpDbHub
         {
             using var cs = content.ReadAsStream(cancellationToken);
             using var sr = new StreamReader(cs);
-            return JsonSerializer.Deserialize<T>(sr.ReadToEnd());
+            return JsonSerializer.Deserialize<T>(sr.ReadToEnd(), _jsonSerializerOptions);
         }
 
         protected virtual async ValueTask<T?> ReadContentAsAsync<T>(HttpContent content, CancellationToken cancellationToken = default)
-            => await content.ReadFromJsonAsync<T>(cancellationToken: cancellationToken);
+            => await content.ReadFromJsonAsync<T>(_jsonSerializerOptions, cancellationToken);
         #endregion
     }
 }

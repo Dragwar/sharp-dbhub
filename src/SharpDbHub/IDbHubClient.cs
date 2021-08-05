@@ -29,6 +29,9 @@ namespace SharpDbHub
         ValueTask<DeleteResponse?> DeleteAsync(DeleteRequest? request = null, CancellationToken cancellationToken = default);
         DeleteResponse? Delete(DeleteRequest? request = null, CancellationToken cancellationToken = default);
 
+        ValueTask<UploadResponse?> UploadAsync(UploadRequest request, CancellationToken cancellationToken = default);
+        UploadResponse? Upload(UploadRequest request, CancellationToken cancellationToken = default);
+
         ValueTask<Stream?> DownloadAsync(DownloadRequest request, CancellationToken cancellationToken = default);
         Stream? Download(DownloadRequest request, CancellationToken cancellationToken = default);
 

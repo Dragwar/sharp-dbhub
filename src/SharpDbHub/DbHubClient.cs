@@ -113,6 +113,44 @@ namespace SharpDbHub
             return ReadContentAs<DeleteResponse>(response.Content, cancellationToken);
         }
 
+        public async ValueTask<UploadResponse?> UploadAsync(UploadRequest request, CancellationToken cancellationToken = default)
+        {
+            request = TrySetApiFallback(request)!;
+            using var content = CreateContent(request);
+
+            using var multipartContent = new MultipartFormDataContent();
+            var str = await content.ReadAsStringAsync(cancellationToken);
+            var allPairs = str?.Split("&", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? Array.Empty<string>();
+            foreach (var pair in allPairs)
+            {
+                var parts = pair.Split("=");
+                multipartContent.Add(new StringContent(parts[1]), parts[0]);
+            }
+            multipartContent.Add(new StreamContent(request.File), "file", request.DbName);
+
+            var response = _httpClient.Send(new HttpRequestMessage(HttpMethod.Post, "upload") { Content = multipartContent }, cancellationToken);
+            return await ReadContentAsAsync<UploadResponse>(response.Content, cancellationToken);
+        }
+
+        public UploadResponse? Upload(UploadRequest request, CancellationToken cancellationToken = default)
+        {
+            request = TrySetApiFallback(request)!;
+            using var content = CreateContent(request);
+
+            using var multipartContent = new MultipartFormDataContent();
+            using var sr = new StreamReader(content.ReadAsStream(cancellationToken));
+            var allPairs = sr.ReadToEnd()?.Split("&", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? Array.Empty<string>();
+            foreach (var pair in allPairs)
+            {
+                var parts = pair.Split("=");
+                multipartContent.Add(new StringContent(parts[1]), parts[0]);
+            }
+            multipartContent.Add(new StreamContent(request.File), "file", request.DbName);
+
+            var response = _httpClient.Send(new HttpRequestMessage(HttpMethod.Post, "upload") { Content = multipartContent }, cancellationToken);
+            return ReadContentAs<UploadResponse>(response.Content, cancellationToken);
+        }
+
         public async ValueTask<Stream?> DownloadAsync(DownloadRequest request, CancellationToken cancellationToken = default)
         {
             var response = await SendRequestAsync("download", request, cancellationToken);

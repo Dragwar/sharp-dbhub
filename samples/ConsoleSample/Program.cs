@@ -66,6 +66,9 @@ namespace ConsoleSample
 
             // or pass the ApiKey along with the request object (not stored for future requests)
             //_dbHubClient.GetDatabases(new() { ApiKey = "<some-api-key>" }, cancellationToken: cancellationToken);
+
+            // Upload/UploadAsync will dispose the stream
+            //var uploadResponse = _dbHubClient.Upload(new UploadRequest(File.OpenRead("<SQL_LITE_DB_FILE_PATH>"), "someUserName", "test.db"), cancellationToken);
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
