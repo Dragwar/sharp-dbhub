@@ -2,9 +2,9 @@
 
 namespace SharpDbHub
 {
-    internal class AllLowerCaseNamingPolicy : JsonNamingPolicy
-    {
-        public override string ConvertName(string name)
-            => name.Replace("_", "").ToLower();
-    }
+	internal class AllLowerCaseNamingPolicy : JsonNamingPolicy
+	{
+		public override string ConvertName(string name)
+			=> name.Replace("_", "").ToLower();
+	}
 }
