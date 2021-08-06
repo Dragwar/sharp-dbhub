@@ -50,5 +50,8 @@ namespace SharpDbHub
 
 		ValueTask<IDictionary<string, TagInfo>?> GetTagsAsync(TagsRequest request, CancellationToken cancellationToken = default);
 		IDictionary<string, TagInfo>? GetTags(TagsRequest request, CancellationToken cancellationToken = default);
+
+		ValueTask<IDictionary<string, ReleaseInfo>?> GetReleasesAsync(ReleasesRequest request, CancellationToken cancellationToken = default);
+		IDictionary<string, ReleaseInfo>? GetReleases(ReleasesRequest request, CancellationToken cancellationToken = default);
 	}
 }

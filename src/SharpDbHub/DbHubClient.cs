@@ -227,5 +227,17 @@ namespace SharpDbHub
 			var response = SendRequest("tags", request, cancellationToken);
 			return ReadContentAs<IDictionary<string, TagInfo>>(response.Content, cancellationToken);
 		}
+
+		public async ValueTask<IDictionary<string, ReleaseInfo>?> GetReleasesAsync(ReleasesRequest request, CancellationToken cancellationToken = default)
+		{
+			var response = await SendRequestAsync("releases", request, cancellationToken);
+			return await ReadContentAsAsync<IDictionary<string, ReleaseInfo>>(response.Content, cancellationToken);
+		}
+
+		public IDictionary<string, ReleaseInfo>? GetReleases(ReleasesRequest request, CancellationToken cancellationToken = default)
+		{
+			var response = SendRequest("releases", request, cancellationToken);
+			return ReadContentAs<IDictionary<string, ReleaseInfo>>(response.Content, cancellationToken);
+		}
 	}
 }
