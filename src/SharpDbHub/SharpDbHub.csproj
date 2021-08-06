@@ -5,6 +5,31 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>Dragwar</Authors>
+		<Title>SharpDbHub</Title>
+		<Summary>A simple C# wrapper for dbhub.io APIs</Summary>
+		<Description>A simple C# wrapper for dbhub.io APIs</Description>
+		<PackageProjectUrl>https://github.com/Dragwar/sharp-dbhub</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Dragwar/sharp-dbhub</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>csharp; dotnet; dotnet-core; dbhub; dbhub.io; dbhub-api;</PackageTags>
+		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
+		<PackageVersion>1.0.0</PackageVersion>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<NeutralLanguage>en</NeutralLanguage>
+		<ApplicationIcon>..\..\icon.ico</ApplicationIcon>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="../../icon.png" Pack="true" PackagePath="">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
 	</ItemGroup>
