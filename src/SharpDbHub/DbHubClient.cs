@@ -21,6 +21,11 @@ namespace SharpDbHub
 		{
 		}
 
+		public DbHubClient()
+			: base(_fallbackHttpClient.Value)
+		{
+		}
+
 		private static bool IsBase64String(string base64)
 		{
 			Span<byte> buffer = new(new byte[base64.Length]);

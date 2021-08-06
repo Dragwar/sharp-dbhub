@@ -14,6 +14,7 @@ namespace SharpDbHub
 {
 	public abstract class DbHubClientBase : IDisposable, IAsyncDisposable
 	{
+		protected static readonly Lazy<HttpClient> _fallbackHttpClient = new(() => new HttpClient());
 		private readonly JsonSerializerOptions _jsonSerializeOptions = new() { PropertyNamingPolicy = new AllLowerCaseNamingPolicy() };
 		private readonly JsonSerializerOptions _jsonDeserializeOptions = new() { PropertyNamingPolicy = new AllLowerCaseSnakeCaseNamingPolicy() };
 
@@ -36,18 +37,62 @@ namespace SharpDbHub
 		}
 
 		#region Dispose Methods
-#pragma warning disable CA1816 // Dispose methods should call SuppressFinalize
+		private bool _isDisposed;
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!_isDisposed)
+			{
+				if (disposing)
+				{
+					// TODO: dispose managed state (managed objects)
+					_httpClient?.Dispose();
+				}
+
+				// TODO: free unmanaged resources (unmanaged objects) and override finalizer
+				// TODO: set large fields to null
+				_isDisposed = true;
+			}
+		}
+
 		public void Dispose()
 		{
-			((IDisposable)_httpClient).Dispose();
+			// Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+			Dispose(disposing: true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual ValueTask DisposeAsync(bool disposing)
+		{
+			if (!_isDisposed)
+			{
+				if (disposing)
+				{
+					// TODO: dispose managed state (managed objects)
+					_httpClient?.Dispose();
+				}
+
+				// TODO: free unmanaged resources (unmanaged objects) and override finalizer
+				// TODO: set large fields to null
+				_isDisposed = true;
+			}
+			return ValueTask.CompletedTask;
 		}
 
 		public ValueTask DisposeAsync()
 		{
-			Dispose();
+			// Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+			DisposeAsync(disposing: true);
+			GC.SuppressFinalize(this);
 			return ValueTask.CompletedTask;
 		}
-#pragma warning restore CA1816 // Dispose methods should call SuppressFinalize
+
+
+		// // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+		// ~DbHubClientBase()
+		// {
+		//     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+		//     Dispose(disposing: false);
+		// }
 		#endregion
 
 		protected FormUrlEncodedContent CreateContent<T>(T? request) where T : BaseAuthRequest
