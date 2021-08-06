@@ -47,5 +47,8 @@ namespace SharpDbHub
 
 		ValueTask<IDictionary<string, CommitInfo>?> GetCommitsAsync(CommitsRequest request, CancellationToken cancellationToken = default);
 		IDictionary<string, CommitInfo>? GetCommits(CommitsRequest request, CancellationToken cancellationToken = default);
+
+		ValueTask<IDictionary<string, TagInfo>?> GetTagsAsync(TagsRequest request, CancellationToken cancellationToken = default);
+		IDictionary<string, TagInfo>? GetTags(TagsRequest request, CancellationToken cancellationToken = default);
 	}
 }

@@ -215,5 +215,17 @@ namespace SharpDbHub
 			var response = SendRequest("commits", request, cancellationToken);
 			return ReadContentAs<IDictionary<string, CommitInfo>>(response.Content, cancellationToken);
 		}
+
+		public async ValueTask<IDictionary<string, TagInfo>?> GetTagsAsync(TagsRequest request, CancellationToken cancellationToken = default)
+		{
+			var response = await SendRequestAsync("tags", request, cancellationToken);
+			return await ReadContentAsAsync<IDictionary<string, TagInfo>>(response.Content, cancellationToken);
+		}
+
+		public IDictionary<string, TagInfo>? GetTags(TagsRequest request, CancellationToken cancellationToken = default)
+		{
+			var response = SendRequest("tags", request, cancellationToken);
+			return ReadContentAs<IDictionary<string, TagInfo>>(response.Content, cancellationToken);
+		}
 	}
 }
