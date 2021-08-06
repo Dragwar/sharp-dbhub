@@ -9,6 +9,7 @@ namespace SharpDbHub
 {
 	public interface IDbHubClient : IDisposable, IAsyncDisposable
 	{
+		bool HasApiKey();
 		IDbHubClient SetApiKey(string apiKey);
 
 		ValueTask<IEnumerable<string>?> GetDatabasesAsync(DatabasesRequest? request = null, CancellationToken cancellationToken = default);

@@ -27,6 +27,7 @@ namespace SharpDbHub
 			return Convert.TryFromBase64String(base64, buffer, out _);
 		}
 
+		public bool HasApiKey() => Options.HasApiKey;
 		public IDbHubClient SetApiKey(string? apiKey)
 		{
 			Options = Options with { ApiKey = apiKey };
