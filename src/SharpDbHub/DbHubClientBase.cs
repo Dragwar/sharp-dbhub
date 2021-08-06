@@ -50,7 +50,7 @@ namespace SharpDbHub
 #pragma warning restore CA1816 // Dispose methods should call SuppressFinalize
 		#endregion
 
-		protected FormUrlEncodedContent CreateContent<T>(T? request) where T : AuthRequestBase
+		protected FormUrlEncodedContent CreateContent<T>(T? request) where T : BaseAuthRequest
 		{
 			request = TrySetApiFallback(request);
 			IEnumerable<KeyValuePair<string, string>>? keyValuePairs = null;
@@ -68,7 +68,7 @@ namespace SharpDbHub
 		}
 
 		protected async Task<FormUrlEncodedContent> CreateContentAsync<T>(T? request, CancellationToken cancellationToken)
-			where T : AuthRequestBase
+			where T : BaseAuthRequest
 		{
 			request = TrySetApiFallback(request);
 			IEnumerable<KeyValuePair<string, string>>? keyValuePairs = null;
@@ -91,7 +91,7 @@ namespace SharpDbHub
 		private static Func<JsonProperty, KeyValuePair<string, string>> CreateKeyValuePair() => jp => KeyValuePair.Create(jp.Name, jp.Value.ToString());
 
 		protected T? TrySetApiFallback<T>(T? request)
-			where T : AuthRequestBase => request != null
+			where T : BaseAuthRequest => request != null
 			? request with
 			{
 				ApiKey = !string.IsNullOrWhiteSpace(request.ApiKey)
@@ -102,7 +102,7 @@ namespace SharpDbHub
 
 		#region Send Request Methods
 		protected virtual HttpResponseMessage SendRequest<T>(string endpoint, T? request, CancellationToken cancellationToken = default)
-			where T : AuthRequestBase
+			where T : BaseAuthRequest
 		{
 			request = TrySetApiFallback(request);
 			FormUrlEncodedContent content = CreateContent(request);
@@ -117,7 +117,7 @@ namespace SharpDbHub
 		}
 
 		protected virtual async ValueTask<HttpResponseMessage> SendRequestAsync<T>(string endpoint, T? request, CancellationToken cancellationToken = default)
-			where T : AuthRequestBase
+			where T : BaseAuthRequest
 		{
 			request = TrySetApiFallback(request);
 			FormUrlEncodedContent content = await CreateContentAsync(request, cancellationToken);

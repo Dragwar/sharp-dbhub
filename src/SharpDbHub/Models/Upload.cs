@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SharpDbHub.Models
 {
-	public record UploadRequest : DbOwnerAndDbNameRequestBase
+	public record UploadRequest : BaseDbOwnerAndDbNameRequest
 	{
 		/// <param name="dbOwner">The owner of the database</param>
 		/// <param name="dbName">Optional (but recommended) - The name of the database</param>

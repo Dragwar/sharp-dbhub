@@ -3,7 +3,7 @@
 namespace SharpDbHub.Models
 {
 	/// <inheritdoc />
-	public record BranchesRequest(string DbOwner, string DbName) : DbOwnerAndDbNameRequestBase(DbOwner, DbName);
+	public record BranchesRequest(string DbOwner, string DbName) : BaseDbOwnerAndDbNameRequest(DbOwner, DbName);
 
 	/// <param name="DefaultBranch">The name of the default branch for the database. eg: "master"</param>
 	/// <param name="Branches">Contains details of all branches in the database, as an unordered set of "branch name": { branch details } pairs</param>

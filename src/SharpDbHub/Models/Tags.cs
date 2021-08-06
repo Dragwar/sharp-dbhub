@@ -3,7 +3,7 @@
 namespace SharpDbHub.Models
 {
 	/// <inheritdoc />
-	public record TagsRequest(string DbOwner, string DbName) : DbOwnerAndDbNameRequestBase(DbOwner, DbName);
+	public record TagsRequest(string DbOwner, string DbName) : BaseDbOwnerAndDbNameRequest(DbOwner, DbName);
 
 	/// <param name="Commit">The commit ID the tag corresponds to</param>
 	/// <param name="Date">When the tag was created</param>

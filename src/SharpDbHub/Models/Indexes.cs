@@ -3,7 +3,7 @@
 namespace SharpDbHub.Models
 {
 	/// <inheritdoc />
-	public record IndexesRequest(string DbOwner, string DbName) : DbOwnerAndDbNameRequestBase(DbOwner, DbName);
+	public record IndexesRequest(string DbOwner, string DbName) : BaseDbOwnerAndDbNameRequest(DbOwner, DbName);
 
 	/// <param name="Name">The name of the index</param>
 	/// <param name="Table">The name of the table the index belongs to</param>

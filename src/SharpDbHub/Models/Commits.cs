@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace SharpDbHub.Models
 {
 	/// <inheritdoc />
-	public record CommitsRequest(string DbOwner, string DbName) : DbOwnerAndDbNameRequestBase(DbOwner, DbName);
+	public record CommitsRequest(string DbOwner, string DbName) : BaseDbOwnerAndDbNameRequest(DbOwner, DbName);
 
 	public record CommitsResponse(IDictionary<string, CommitInfo> CommitDetails);
 

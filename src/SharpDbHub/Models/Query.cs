@@ -1,8 +1,8 @@
 ﻿namespace SharpDbHub.Models
 {
-	/// <inheritdoc cref="DbOwnerAndDbNameRequestBase" />
+	/// <inheritdoc cref="BaseDbOwnerAndDbNameRequest" />
 	/// <param name="Sql">The SQL query</param>
-	public record QueryRequest(string DbOwner, string DbName, string Sql) : DbOwnerAndDbNameRequestBase(DbOwner, DbName);
+	public record QueryRequest(string DbOwner, string DbName, string Sql) : BaseDbOwnerAndDbNameRequest(DbOwner, DbName);
 
 	/// <param name="Name">The name of the return field</param>
 	/// <param name="Type">The type of data in the field (numeric)</param>

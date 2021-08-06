@@ -3,7 +3,7 @@
 namespace SharpDbHub.Models
 {
 	/// <inheritdoc />
-	public record ReleasesRequest(string DbOwner, string DbName) : DbOwnerAndDbNameRequestBase(DbOwner, DbName);
+	public record ReleasesRequest(string DbOwner, string DbName) : BaseDbOwnerAndDbNameRequest(DbOwner, DbName);
 
 	/// <param name="Commit">The commit ID the release corresponds to</param>
 	/// <param name="Date">When the release was created</param>
