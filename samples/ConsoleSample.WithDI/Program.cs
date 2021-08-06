@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ConsoleSample
+namespace ConsoleSample.WithDI
 {
 	public class Program : IHostedService
 	{

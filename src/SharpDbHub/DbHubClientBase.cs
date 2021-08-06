@@ -78,19 +78,18 @@ namespace SharpDbHub
 			return ValueTask.CompletedTask;
 		}
 
-		public ValueTask DisposeAsync()
+		public async ValueTask DisposeAsync()
 		{
-			// Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-			DisposeAsync(disposing: true);
+			// Do not change this code. Put cleanup code in 'DisposeAsync(bool disposing)' method
+			await DisposeAsync(disposing: true);
 			GC.SuppressFinalize(this);
-			return ValueTask.CompletedTask;
 		}
 
 
-		// // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+		// // TODO: override finalizer only if 'Dispose(bool disposing)' and 'DisposeAsync(bool disposing)' has code to free unmanaged resources
 		// ~DbHubClientBase()
 		// {
-		//     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+		//     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' and 'DisposeAsync(bool disposing)' method
 		//     Dispose(disposing: false);
 		// }
 		#endregion

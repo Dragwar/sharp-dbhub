@@ -21,6 +21,11 @@ namespace SharpDbHub
 		{
 		}
 
+		public DbHubClient(string apiKey)
+			: base(_fallbackHttpClient.Value, DbHubClientOptions.Default with { ApiKey = apiKey })
+		{
+		}
+
 		public DbHubClient()
 			: base(_fallbackHttpClient.Value)
 		{
