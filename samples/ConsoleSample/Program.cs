@@ -32,7 +32,6 @@ namespace ConsoleSample
 
 		private static void ConfigureHost(IConfigurationBuilder builder)
 		{
-			builder.AddEnvironmentVariables();
 			builder.AddUserSecrets(Assembly.GetExecutingAssembly());
 		}
 

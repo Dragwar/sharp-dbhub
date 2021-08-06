@@ -239,5 +239,17 @@ namespace SharpDbHub
 			var response = SendRequest("releases", request, cancellationToken);
 			return ReadContentAs<IDictionary<string, ReleaseInfo>>(response.Content, cancellationToken);
 		}
+
+		public async ValueTask<MetadataResponse?> GetMetadataAsync(MetadataRequest request, CancellationToken cancellationToken = default)
+		{
+			var response = await SendRequestAsync("metadata", request, cancellationToken);
+			return await ReadContentAsAsync<MetadataResponse>(response.Content, cancellationToken);
+		}
+
+		public MetadataResponse? GetMetadata(MetadataRequest request, CancellationToken cancellationToken = default)
+		{
+			var response = SendRequest("metadata", request, cancellationToken);
+			return ReadContentAs<MetadataResponse>(response.Content, cancellationToken);
+		}
 	}
 }

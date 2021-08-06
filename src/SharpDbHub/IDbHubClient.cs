@@ -53,5 +53,8 @@ namespace SharpDbHub
 
 		ValueTask<IDictionary<string, ReleaseInfo>?> GetReleasesAsync(ReleasesRequest request, CancellationToken cancellationToken = default);
 		IDictionary<string, ReleaseInfo>? GetReleases(ReleasesRequest request, CancellationToken cancellationToken = default);
+
+		ValueTask<MetadataResponse?> GetMetadataAsync(MetadataRequest request, CancellationToken cancellationToken = default);
+		MetadataResponse? GetMetadata(MetadataRequest request, CancellationToken cancellationToken = default);
 	}
 }

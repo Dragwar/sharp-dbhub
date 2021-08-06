@@ -6,4 +6,6 @@
 	/// <param name="DbOwner">The owner of the database</param>
 	/// <param name="DbName">The name of the database</param>
 	public abstract record BaseDbOwnerAndDbNameRequest(string DbOwner, string DbName) : BaseAuthRequest();
+
+	public record ErrorResponse(string Error);
 }
