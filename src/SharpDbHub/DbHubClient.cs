@@ -191,5 +191,17 @@ namespace SharpDbHub
 			var response = SendRequest("webpage", request, cancellationToken);
 			return ReadContentAs<WebpageResponse>(response.Content, cancellationToken);
 		}
+
+		public async ValueTask<BranchesResponse?> GetBranchesAsync(BranchesRequest request, CancellationToken cancellationToken = default)
+		{
+			var response = await SendRequestAsync("branches", request, cancellationToken);
+			return await ReadContentAsAsync<BranchesResponse>(response.Content, cancellationToken);
+		}
+
+		public BranchesResponse? GetBranches(BranchesRequest request, CancellationToken cancellationToken = default)
+		{
+			var response = SendRequest("branches", request, cancellationToken);
+			return ReadContentAs<BranchesResponse>(response.Content, cancellationToken);
+		}
 	}
 }

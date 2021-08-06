@@ -41,5 +41,8 @@ namespace SharpDbHub
 
 		ValueTask<WebpageResponse?> GetWebpageAsync(WebpageRequest request, CancellationToken cancellationToken = default);
 		WebpageResponse? GetWebpage(WebpageRequest request, CancellationToken cancellationToken = default);
+		
+		ValueTask<BranchesResponse?> GetBranchesAsync(BranchesRequest request, CancellationToken cancellationToken = default);
+		BranchesResponse? GetBranches(BranchesRequest request, CancellationToken cancellationToken = default);
 	}
 }
