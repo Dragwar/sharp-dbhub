@@ -14,13 +14,12 @@ namespace SharpDbHub
 {
 	public abstract class DbHubClientBase : IDisposable, IAsyncDisposable
 	{
-		private readonly JsonSerializerOptions _jsonSerializerOptions = new() { PropertyNamingPolicy = new AllLowerCaseNamingPolicy() };
+		private readonly JsonSerializerOptions _jsonSerializeOptions = new() { PropertyNamingPolicy = new AllLowerCaseNamingPolicy() };
+		private readonly JsonSerializerOptions _jsonDeserializeOptions = new() { PropertyNamingPolicy = new AllLowerCaseSnakeCaseNamingPolicy() };
 
 		protected readonly HttpClient _httpClient;
 
 		protected DbHubClientOptions Options { get; set; }
-
-		public bool HasApiKey => Options.HasApiKey;
 
 		protected DbHubClientBase(HttpClient httpClient, DbHubClientOptions? options = null)
 		{
@@ -57,7 +56,7 @@ namespace SharpDbHub
 			IEnumerable<KeyValuePair<string, string>>? keyValuePairs = null;
 			if (request is not null)
 			{
-				var json = JsonSerializer.Serialize(request, options: _jsonSerializerOptions);
+				var json = JsonSerializer.Serialize(request, options: _jsonSerializeOptions);
 				using var jDoc = JsonDocument.Parse(json);
 				var enumerable = jDoc.RootElement.EnumerateObject().ToArray();
 				keyValuePairs = enumerable.Select(CreateKeyValuePair()).ToArray();
@@ -76,7 +75,7 @@ namespace SharpDbHub
 			if (request is not null)
 			{
 				using var ms = new MemoryStream();
-				await JsonSerializer.SerializeAsync(ms, request, _jsonSerializerOptions, cancellationToken);
+				await JsonSerializer.SerializeAsync(ms, request, _jsonSerializeOptions, cancellationToken);
 				var json = Encoding.UTF8.GetString(ms.ToArray());
 				using var utf8JsonStream = new MemoryStream(Encoding.UTF8.GetBytes(json));
 				using var jDoc = await JsonDocument.ParseAsync(utf8JsonStream, cancellationToken: cancellationToken);
@@ -134,11 +133,11 @@ namespace SharpDbHub
 		{
 			using var cs = content.ReadAsStream(cancellationToken);
 			using var sr = new StreamReader(cs);
-			return JsonSerializer.Deserialize<T>(sr.ReadToEnd(), _jsonSerializerOptions);
+			return JsonSerializer.Deserialize<T>(sr.ReadToEnd(), _jsonDeserializeOptions);
 		}
 
 		protected virtual async ValueTask<T?> ReadContentAsAsync<T>(HttpContent content, CancellationToken cancellationToken = default)
-			=> await content.ReadFromJsonAsync<T>(_jsonSerializerOptions, cancellationToken);
+			=> await content.ReadFromJsonAsync<T>(_jsonDeserializeOptions, cancellationToken);
 		#endregion
 	}
 }
