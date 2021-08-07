@@ -22,13 +22,13 @@ Console.WriteLine($"Found the following databases: '{string.Join("', '", myDatab
 ```C#
 ////---------- add DbHubClient to services ----------////
 ////---------- (you need to set the ApiKey before you make an api call) ----------////
-//services.AddDbHubClient();
+services.AddDbHubClient();
 
 ////---------- add DbHubClient to services with an ApiKey ----------////
 services.AddDbHubClient(ctx.Configuration["DbHub:ApiKey"]);
 
 ////---------- add DbHubClient to services with more options ----------////
-//services.AddDbHubClient(new DbHubClientOptions(new Uri("some-new-base-url"), "some-api-key", TimeSpan.FromSeconds(15)));
+services.AddDbHubClient(new DbHubClientOptions(new Uri("some-new-base-url"), "some-api-key", TimeSpan.FromSeconds(15)));
 ```
 
 ### Closing notes
