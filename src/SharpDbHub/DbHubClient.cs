@@ -139,7 +139,7 @@ namespace SharpDbHub
 			}
 			multipartContent.Add(new StreamContent(request.File), "file", request.DbName);
 
-			var response = _httpClient.Send(new HttpRequestMessage(HttpMethod.Post, "upload") { Content = multipartContent }, cancellationToken);
+			var response = await _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, "upload") { Content = multipartContent }, cancellationToken);
 			return await ReadContentAsAsync<UploadResponse>(response.Content, cancellationToken);
 		}
 

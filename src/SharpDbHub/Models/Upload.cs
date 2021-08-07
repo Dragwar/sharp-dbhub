@@ -7,21 +7,20 @@ namespace SharpDbHub.Models
 	{
 		/// <param name="dbOwner">The owner of the database</param>
 		/// <param name="dbName">Optional (but recommended) - The name of the database</param>
-		/// <param name="commitId">Only required for existing databases - The commit ID which this new upload should be appended to</param>
-		public UploadRequest(Stream file, string dbOwner, string? dbName = null, string? commitId = null)
+		/// <param name="commit">Only required for existing databases - The commit ID which this new upload should be appended to</param>
+		public UploadRequest(Stream file, string dbOwner, string? dbName = null, string? commit = null)
 			: base(dbOwner, dbName!)
 		{
 			DbOwner = dbOwner;
 			DbName = dbName!;
-			CommitId = commitId;
+			Commit = commit;
 			File = file;
 		}
 
-		[JsonPropertyName("commit_id")]
 		/// <summary>
 		/// The commit ID which this new upload should be appended to
 		/// </summary>
-		public string? CommitId { get; init; }
+		public string? Commit { get; init; }
 
 		/// <summary>
 		/// The email address of the person who created this commit
