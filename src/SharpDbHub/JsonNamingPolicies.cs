@@ -14,7 +14,7 @@ namespace SharpDbHub
 	internal class AllLowerCaseSnakeCaseNamingPolicy : JsonNamingPolicy
 	{
 		/// <summary>
-		/// <see cref="https://stackoverflow.com/a/67332992/15357544"/>
+		/// <see href="https://stackoverflow.com/a/67332992/15357544"/>
 		/// </summary>
 		private static string ToSnakeCase(string text)
 		{

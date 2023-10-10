@@ -8,7 +8,7 @@ namespace SharpDbHub.Models
 		/// <param name="dbOwner">The owner of the database</param>
 		/// <param name="dbName">Optional (but recommended) - The name of the database</param>
 		/// <param name="commit">Only required for existing databases - The commit ID which this new upload should be appended to</param>
-		public UploadRequest(Stream file, string dbOwner, string? dbName = null, string? commit = null)
+		public UploadRequest(Stream file, string dbOwner, string? dbName = "", string? commit = null)
 			: base(dbOwner, dbName!)
 		{
 			DbOwner = dbOwner;
@@ -97,6 +97,17 @@ namespace SharpDbHub.Models
 
 		[JsonIgnore]
 		public Stream File { get; init; }
+
+		/// <summary>
+		/// A boolean indicating whether this upload is a live database
+		/// <para />
+		/// NOTE: This parameter is experimental and may change
+		/// </summary>
+		/// <remarks>
+		/// "Live" databases do not have version control. Please see more here:
+		/// <see href="https://sqlitebrowser.org/blog/live-databases-are-now-live/"/>
+		/// </remarks>
+		public bool? Live { get; init; }
 	}
 
 	/// <param name="Commit">The unique ID of the new commit</param>

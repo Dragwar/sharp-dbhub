@@ -56,5 +56,27 @@ namespace SharpDbHub
 
 		ValueTask<MetadataResponse?> GetMetadataAsync(MetadataRequest request, CancellationToken cancellationToken = default);
 		MetadataResponse? GetMetadata(MetadataRequest request, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Executes a SQLite statement on a LIVE database. eg INSERT, UPDATE, DELETE
+		/// </summary>
+		/// <remarks>
+		/// This API is EXPERIMENTAL and may change
+		/// <para />
+		/// Note - This is a newly added EXPERIMENTAL API, that only works with LIVE databases.
+		/// To try it out Upload a new "LIVE" database using this <see cref="UploadAsync(UploadRequest, CancellationToken)"/> API, or use the Upload page on the main DBHub.io website and select the LIVE option under "Advanced". 
+		/// </remarks>
+		ValueTask<ExecuteResponse?> ExecuteAsync(ExecuteRequest request, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Executes a SQLite statement on a LIVE database. eg INSERT, UPDATE, DELETE
+		/// </summary>
+		/// <remarks>
+		/// This API is EXPERIMENTAL and may change
+		/// <para />
+		/// Note - This is a newly added EXPERIMENTAL API, that only works with LIVE databases.
+		/// To try it out Upload a new "LIVE" database using this <see cref="Upload(UploadRequest, CancellationToken)"/> API, or use the Upload page on the main DBHub.io website and select the LIVE option under "Advanced". 
+		/// </remarks>
+		ExecuteResponse? Execute(ExecuteRequest request, CancellationToken cancellationToken = default);
 	}
 }
