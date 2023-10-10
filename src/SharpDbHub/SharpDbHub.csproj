@@ -15,14 +15,21 @@
 		<RepositoryUrl>https://github.com/Dragwar/sharp-dbhub</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>csharp; dotnet; dotnet-core; dbhub; dbhub.io; dbhub-api;</PackageTags>
-		<PackageReleaseNotes>Upload API bug fixes</PackageReleaseNotes>
-		<PackageVersion>1.0.1</PackageVersion>
+		<PackageReleaseNotes>DBHub API v0.3 support</PackageReleaseNotes>
+		<PackageVersion>1.1.1</PackageVersion>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
 		<NeutralLanguage>en</NeutralLanguage>
 		<ApplicationIcon>..\..\icon.ico</ApplicationIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="../../README.md" Pack="true" PackagePath="/">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="../../icon.png" Pack="true" PackagePath="">

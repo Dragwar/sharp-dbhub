@@ -33,7 +33,7 @@ namespace SharpDbHub
 
 		private static bool IsBase64String(string base64)
 		{
-			Span<byte> buffer = new(new byte[base64.Length]);
+			Span<byte> buffer = stackalloc byte[base64.Length];
 			return Convert.TryFromBase64String(base64, buffer, out _);
 		}
 
@@ -137,7 +137,14 @@ namespace SharpDbHub
 				var parts = pair.Split("=");
 				multipartContent.Add(new StringContent(parts[1]), parts[0]);
 			}
-			multipartContent.Add(new StreamContent(request.File), "file", request.DbName);
+			if (!string.IsNullOrWhiteSpace(request.DbName))
+			{
+				multipartContent.Add(new StreamContent(request.File), "file", request.DbName);
+			}
+			else
+			{
+				multipartContent.Add(new StreamContent(request.File), "file");
+			}
 
 			var response = await _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, "upload") { Content = multipartContent }, cancellationToken);
 			return await ReadContentAsAsync<UploadResponse>(response.Content, cancellationToken);
@@ -156,7 +163,14 @@ namespace SharpDbHub
 				var parts = pair.Split("=");
 				multipartContent.Add(new StringContent(parts[1]), parts[0]);
 			}
-			multipartContent.Add(new StreamContent(request.File), "file", request.DbName);
+			if (!string.IsNullOrWhiteSpace(request.DbName))
+			{
+				multipartContent.Add(new StreamContent(request.File), "file", request.DbName);
+			}
+			else
+			{
+				multipartContent.Add(new StreamContent(request.File), "file");
+			}
 
 			var response = _httpClient.Send(new HttpRequestMessage(HttpMethod.Post, "upload") { Content = multipartContent }, cancellationToken);
 			return ReadContentAs<UploadResponse>(response.Content, cancellationToken);
@@ -260,6 +274,26 @@ namespace SharpDbHub
 		{
 			var response = SendRequest("metadata", request, cancellationToken);
 			return ReadContentAs<MetadataResponse>(response.Content, cancellationToken);
+		}
+
+		public async ValueTask<ExecuteResponse?> ExecuteAsync(ExecuteRequest request, CancellationToken cancellationToken = default)
+		{
+			if (!IsBase64String(request.Sql))
+			{
+				request = request with { Sql = Convert.ToBase64String(Encoding.UTF8.GetBytes(request.Sql)) };
+			}
+			var response = await SendRequestAsync("execute", request, cancellationToken);
+			return await ReadContentAsAsync<ExecuteResponse>(response.Content, cancellationToken);
+		}
+
+		public ExecuteResponse? Execute(ExecuteRequest request, CancellationToken cancellationToken = default)
+		{
+			if (!IsBase64String(request.Sql))
+			{
+				request = request with { Sql = Convert.ToBase64String(Encoding.UTF8.GetBytes(request.Sql)) };
+			}
+			var response = SendRequest("execute", request, cancellationToken);
+			return ReadContentAs<ExecuteResponse>(response.Content, cancellationToken);
 		}
 	}
 }
