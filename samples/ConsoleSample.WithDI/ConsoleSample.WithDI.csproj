@@ -13,7 +13,13 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
-		<PackageReference Include="SharpDbHub" Version="1.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\SharpDbHub\SharpDbHub.csproj" />
+
+		<!--Install SharpDbHub from nuget or add package reference below (remove line above)-->
+		<!--<PackageReference Include="SharpDbHub" Version="1.1.1" />-->
 	</ItemGroup>
 
 </Project>

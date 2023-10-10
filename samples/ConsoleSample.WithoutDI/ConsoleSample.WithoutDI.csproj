@@ -6,7 +6,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="SharpDbHub" Version="1.0.0" />
+		<ProjectReference Include="..\..\src\SharpDbHub\SharpDbHub.csproj" />
+
+		<!--Install SharpDbHub from nuget or add package reference below (remove line above)-->
+		<!--<PackageReference Include="SharpDbHub" Version="1.1.1" />-->
 	</ItemGroup>
 
 </Project>
