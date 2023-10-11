@@ -15,8 +15,8 @@
 		<RepositoryUrl>https://github.com/Dragwar/sharp-dbhub</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>csharp; dotnet; dotnet-core; dbhub; dbhub.io; dbhub-api;</PackageTags>
-		<PackageReleaseNotes>DBHub API v0.3 support</PackageReleaseNotes>
-		<PackageVersion>1.1.1</PackageVersion>
+		<PackageReleaseNotes>Query, QueryAsync fixes</PackageReleaseNotes>
+		<PackageVersion>1.1.2</PackageVersion>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>

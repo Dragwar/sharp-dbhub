@@ -15,8 +15,9 @@ namespace SharpDbHub
 	public abstract class DbHubClientBase : IDisposable, IAsyncDisposable
 	{
 		protected static readonly Lazy<HttpClient> _fallbackHttpClient = new(() => new HttpClient());
-		private readonly JsonSerializerOptions _jsonSerializeOptions = new() { PropertyNamingPolicy = new AllLowerCaseNamingPolicy() };
-		private readonly JsonSerializerOptions _jsonDeserializeOptions = new() { PropertyNamingPolicy = new AllLowerCaseSnakeCaseNamingPolicy() };
+		protected readonly JsonSerializerOptions _jsonSerializeOptions = new() { PropertyNamingPolicy = new AllLowerCaseNamingPolicy() };
+		protected readonly JsonSerializerOptions _jsonDeserializeOptions = new() { PropertyNamingPolicy = new AllLowerCaseSnakeCaseNamingPolicy() };
+		protected readonly JsonSerializerOptions _jsonDeserializeQueryOptions = new() { PropertyNameCaseInsensitive = true };
 
 		protected readonly HttpClient _httpClient;
 
@@ -173,15 +174,21 @@ namespace SharpDbHub
 		#endregion
 
 		#region Read Content As Methods
-		protected virtual T? ReadContentAs<T>(HttpContent content, CancellationToken cancellationToken = default)
+		protected virtual T? ReadContentAs<T>(HttpContent content, JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken = default)
 		{
 			using var cs = content.ReadAsStream(cancellationToken);
 			using var sr = new StreamReader(cs);
-			return JsonSerializer.Deserialize<T>(sr.ReadToEnd(), _jsonDeserializeOptions);
+			return JsonSerializer.Deserialize<T>(sr.ReadToEnd(), jsonSerializerOptions);
 		}
 
+		protected virtual T? ReadContentAs<T>(HttpContent content, CancellationToken cancellationToken = default)
+			=> ReadContentAs<T>(content, _jsonDeserializeOptions, cancellationToken);
+
+		protected virtual async ValueTask<T?> ReadContentAsAsync<T>(HttpContent content, JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken = default)
+			=> await content.ReadFromJsonAsync<T>(jsonSerializerOptions, cancellationToken);
+
 		protected virtual async ValueTask<T?> ReadContentAsAsync<T>(HttpContent content, CancellationToken cancellationToken = default)
-			=> await content.ReadFromJsonAsync<T>(_jsonDeserializeOptions, cancellationToken);
+			=> await ReadContentAsAsync<T>(content, _jsonDeserializeOptions, cancellationToken);
 		#endregion
 	}
 }

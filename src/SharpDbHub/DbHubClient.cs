@@ -99,7 +99,7 @@ namespace SharpDbHub
 				request = request with { Sql = Convert.ToBase64String(Encoding.UTF8.GetBytes(request.Sql)) };
 			}
 			var response = await SendRequestAsync("query", request, cancellationToken);
-			return await ReadContentAsAsync<IEnumerable<IEnumerable<QueryResult>>>(response.Content, cancellationToken);
+			return await ReadContentAsAsync<IEnumerable<IEnumerable<QueryResult>>>(response.Content, _jsonDeserializeQueryOptions, cancellationToken);
 		}
 
 		public IEnumerable<IEnumerable<QueryResult>>? Query(QueryRequest request, CancellationToken cancellationToken = default)
@@ -109,7 +109,7 @@ namespace SharpDbHub
 				request = request with { Sql = Convert.ToBase64String(Encoding.UTF8.GetBytes(request.Sql)) };
 			}
 			var response = SendRequest("query", request, cancellationToken);
-			return ReadContentAs<IEnumerable<IEnumerable<QueryResult>>>(response.Content, cancellationToken);
+			return ReadContentAs<IEnumerable<IEnumerable<QueryResult>>>(response.Content, _jsonDeserializeQueryOptions, cancellationToken);
 		}
 
 		public async ValueTask<DeleteResponse?> DeleteAsync(DeleteRequest? request = null, CancellationToken cancellationToken = default)
